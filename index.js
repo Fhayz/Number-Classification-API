@@ -45,7 +45,7 @@ app.get('/api', (req, res) => {
 
 app.get('/api/classify-number', async (req, res) => {
     if (!req.query.number) {
-        return res.status(400).json({ error: "Please provide a number in the query, e.g., /api/classify-number?number=371" });
+        return res.status(400).json({ number : "alphabet" , error: "true" });
     }
 
     const num = parseInt(req.query.number, 10);
