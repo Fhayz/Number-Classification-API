@@ -35,7 +35,12 @@ function sumOfDigits(num) {
     return num.toString().split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
 }
 
+app.get('/number', (req, res) => {
+    res.status(400).json({ error: "Please provide a number in the URL, e.g., /number/7" });
+});
+
 app.get('/number/:num', async (req, res) => {
+    
     const num = parseInt(req.params.num, 10);
 
     // To check if input is a valid number
