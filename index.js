@@ -39,45 +39,64 @@ function sumOfDigits(num) {
 }
 
 // Base /api endpoint
+app.get('/api', (req, res) => {
+    res.status(400).json({ number: "alphabet", error: true });
+});
+
 app.get('/api/classify-number', async (req, res) => {
-    if (!req.query.number) {
-        return res.status(400).json({ number: "alphabet", error: true });
+    const input = req.query.number;
+
+    // Initialize default values for response fields
+    let num = input;
+    let is_prime = false;
+    let is_perfect = false;
+    let properties = [];
+    let digit_sum = 0;
+    let fun_fact = "Fun fact not available";
+
+    // Check if input is provided
+    if (!input) {
+        return res.status(400).json({ number: "", error: true });
     }
 
-    const input = req.query.number;
-    const num = parseInt(input, 10);
+    // Parse input to integer
+    num = parseInt(input, 10);
 
     // Check if input is a valid number and handle alphabets and mixed inputs like "432ftere2"
-    if (isNaN(num) || /\D/.test(input)) {
-        return res.status(400).json({ number: "alphabet", error: true });
-    }
-    if (num < 0) {
-        return res.status(400).json({ error: "Invalid input: negative numbers are not allowed" });
+    if (isNaN(num) || /\D/.test(input) || num < 0) {
+        return res.status(400).json({ number: input, error: true });
     }
 
-    // Determine properties
-    const isEven = num % 2 === 0;
-    const properties = isEven ? ["even"] : ["odd"];
+    // Calculate properties if input is a valid number
+    if (!isNaN(num)) {
+        is_prime = isPrime(num);
+        is_perfect = isPerfectNumber(num);
+        digit_sum = sumOfDigits(num);
 
-    if (isArmstrongNumber(num)) properties.unshift("armstrong");
+        const isEven = num % 2 === 0;
+        properties = isEven ? ["even"] : ["odd"];
 
-    // To Fetch a fun fact from Numbers API
-    let funFact = "Fun fact not available";
-    try {
-        const response = await axios.get(`http://numbersapi.com/${num}/math?json`);
-        funFact = response.data.text;
-    } catch (error) {
-        console.error("Error fetching fun fact:", error.message); // just in case the API fails
+        if (isArmstrongNumber(num)) {
+            properties.unshift("armstrong");
+        }
+
+        // Fetch a fun fact from Numbers API
+        try {
+            const response = await axios.get(`http://numbersapi.com/${num}/math?json`);
+            fun_fact = response.data.text;
+        } catch (error) {
+            console.error("Error fetching fun fact:", error.message); // just in case the API fails
+        }
     }
 
     // JSON response
     res.json({
         number: num,
-        is_prime: isPrime(num),
-        is_perfect: isPerfectNumber(num),
+        is_prime: is_prime,
+        is_perfect: is_perfect,
         properties: properties,
-        digit_sum: sumOfDigits(num),
-        fun_fact: funFact
+        digit_sum: digit_sum,
+        fun_fact: fun_fact
     });
 });
 
