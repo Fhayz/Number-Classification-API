@@ -75,6 +75,8 @@ app.get('/api/classify-number', async (req, res) => {
         });
     }
 
+    const absoluteNum = Math.abs(num); // Handle negative numbers
+
     // Calculate properties if input is a valid number
     const is_prime = isPrime(num);
     const is_perfect = isPerfectNumber(num);
