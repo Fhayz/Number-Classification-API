@@ -60,7 +60,12 @@ app.get('/api/classify-number', async (req, res) => {
     if (!input) {
         return res.status(400).json({
             number: "",
-            error: true
+            error: true,
+            is_prime: false,
+            is_perfect: false,
+            properties: [],
+            digit_sum: 0,
+            fun_fact: "Fun fact not available"
         });
     }
 
@@ -71,7 +76,12 @@ app.get('/api/classify-number', async (req, res) => {
     if (isNaN(num) || /\D/.test(input)) {
         return res.status(400).json({
             number: input,
-            error: true
+            error: true,
+            is_prime: false,
+            is_perfect: false,
+            properties: [],
+            digit_sum: 0,
+            fun_fact: "Fun fact not available"
         });
     }
 
