@@ -68,8 +68,12 @@ Retrieve properties of a given number.
 **Request Example:**
 ``` sh
 GET HTTP://localhost:3000/number/589
-```
 
+```
+or (for livelinks)
+```
+https://number-classification-api-2-f783.onrender.com/number/589
+```
 
 **Response Example:**
 ``` Json
