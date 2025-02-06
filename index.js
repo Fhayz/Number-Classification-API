@@ -1,8 +1,11 @@
 const express = require('express');
 const axios = require('axios'); // axios for API requests
+const cors = require('cors'); // cors for cross-origin requests
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors()); // enable CORS for all requests
 
 // function for Armstrong number
 function isArmstrongNumber(num) {
