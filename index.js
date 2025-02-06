@@ -35,17 +35,24 @@ function sumOfDigits(num) {
     return num.toString().split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
 }
 
-app.get('/number', (req, res) => {
-    res.status(400).json({ error: "Please provide a number in the URL, e.g., /number/7" });
+// Base /api endpoint
+app.get('/api', (req, res) => {
+    res.status(400).json({ error: "Please provide a number in the query, e.g., /api/classify-number?number=371" });
 });
 
-app.get('/number/:num', async (req, res) => {
-    
-    const num = parseInt(req.params.num, 10);
+app.get('/api/classify-number', async (req, res) => {
+    if (!req.query.number) {
+        return res.status(400).json({ error: "Please provide a number in the query, e.g., /api/classify-number?number=371" });
+    }
 
-    // To check if input is a valid number
+    const num = parseInt(req.query.number, 10);
+
+    // To check if input is a valid number and handle alphabets and negative numbers
     if (isNaN(num)) {
-        return res.status(400).json({ number :"alphabet", error: "true" });
+        return res.status(400).json({ number: "alphabet", error: "true" });
+    }
+    if (num < 0) {
+        return res.status(400).json({ error: "Invalid input: negative numbers are not allowed" });
     }
 
     // Determine properties
@@ -60,7 +67,7 @@ app.get('/number/:num', async (req, res) => {
         const response = await axios.get(`http://numbersapi.com/${num}/math?json`);
         funFact = response.data.text;
     } catch (error) {
-        console.error("Error fetching fun fact:", error.message); //just incase the API fails
+        console.error("Error fetching fun fact:", error.message); // just in case the API fails
     }
 
     // JSON response
