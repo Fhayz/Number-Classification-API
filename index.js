@@ -1,11 +1,11 @@
 const express = require('express');
 const axios = require('axios'); // axios for API requests
-const cors = require('cors'); // cors for cross-origin requests
+const cors = require('cors'); // cors package
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors()); // enable CORS for all requests
+app.use(cors()); // Enable CORS
 
 // function for Armstrong number
 function isArmstrongNumber(num) {
@@ -45,14 +45,14 @@ app.get('/api', (req, res) => {
 
 app.get('/api/classify-number', async (req, res) => {
     if (!req.query.number) {
-        return res.status(400).json({ number : "alphabet" , error: "true" });
+        return res.status(400).json({ number: "alphabet", error: true });
     }
 
     const num = parseInt(req.query.number, 10);
 
-    // To check if input is a valid number and handle alphabets and negative numbers
-    if (isNaN(num)) {
-        return res.status(400).json({ number: "alphabet", error: "true" });
+    // To check if input is a valid number and handle alphabets and mixed inputs like "432ftere2"
+    if (isNaN(num) || /\D/.test(req.query.number)) {
+        return res.status(400).json({ number: "alphabet", error: true });
     }
     if (num < 0) {
         return res.status(400).json({ error: "Invalid input: negative numbers are not allowed" });
