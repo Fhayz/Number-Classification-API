@@ -68,7 +68,7 @@ app.get('/api/classify-number', async (req, res) => {
     const num = parseInt(input, 10);
 
     // Check if input is a valid number and handle alphabets and mixed inputs like "432ftere2"
-    if (isNaN(num) || /\D/.test(input) || num < 0) {
+    if (isNaN(num) || /\D/.test(input)) {
         return res.status(400).json({
             number: input,
             error: true
