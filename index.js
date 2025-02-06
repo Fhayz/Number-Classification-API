@@ -39,19 +39,16 @@ function sumOfDigits(num) {
 }
 
 // Base /api endpoint
-app.get('/api', (req, res) => {
-    res.status(400).json({ error: "Please provide a number in the query, e.g., /api/classify-number?number=371" });
-});
-
 app.get('/api/classify-number', async (req, res) => {
     if (!req.query.number) {
         return res.status(400).json({ number: "alphabet", error: true });
     }
 
-    const num = parseInt(req.query.number, 10);
+    const input = req.query.number;
+    const num = parseInt(input, 10);
 
-    // To check if input is a valid number and handle alphabets and mixed inputs like "432ftere2"
-    if (isNaN(num) || /\D/.test(req.query.number)) {
+    // Check if input is a valid number and handle alphabets and mixed inputs like "432ftere2"
+    if (isNaN(num) || /\D/.test(input)) {
         return res.status(400).json({ number: "alphabet", error: true });
     }
     if (num < 0) {
